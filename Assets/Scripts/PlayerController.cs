@@ -37,11 +37,9 @@ public class PlayerController : MonoBehaviour
     {
         if (!in_animation)
         {
-            Vector3 pos = rig.position;
             speed = (Input.GetKey(KeyCode.LeftShift)) ? run_speed : walk_speed;
             input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-            Vector3 posPrime = pos + rig.transform.TransformDirection(input.normalized) * speed * Time.fixedDeltaTime;
-            rig.position = posPrime;
+            rig.position += rig.transform.TransformDirection(input.normalized) * speed * .01f;
         }
     }
 
