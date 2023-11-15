@@ -54,12 +54,12 @@ public class PlayerController : MonoBehaviour
             Camera.main.transform.localRotation = Quaternion.Euler(-pitch, 0, 0);
             transform.rotation *= Quaternion.Euler(0, yaw, 0);
 
-            if (Input.GetKeyDown(KeyCode.E)) StartCoroutine("Pickup");
+            if (Input.GetKeyDown(KeyCode.E)) StartCoroutine("Interact");
         }
     }
 
     // Pick up function
-    private IEnumerator Pickup() 
+    private IEnumerator Interact() 
     {
         in_animation = true;
         RaycastHit hit;
@@ -103,6 +103,12 @@ public class PlayerController : MonoBehaviour
                     hand.transform.GetChild(0).SetParent(null);
                     holding = false;
                 }
+            }
+
+            if (hit.collider.CompareTag("door"))
+            {
+                print("hello");
+                GameObject.FindObjectOfType<SceneChanger>().toBasement();
             }
         }
         in_animation = false;

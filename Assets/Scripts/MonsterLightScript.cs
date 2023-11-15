@@ -15,15 +15,7 @@ public class MonsterLightScript : MonoBehaviour
         spot = GetComponent<Light>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            StartCoroutine("prep");
-        }
-    }
-
-    IEnumerator prep() 
+    public IEnumerator prep() 
     {
         StartCoroutine("approach");
         StartCoroutine("shaker");
@@ -36,6 +28,7 @@ public class MonsterLightScript : MonoBehaviour
         spot.range = 10;
         yield return new WaitForSeconds(2);
         transform.parent = Camera.main.transform.parent;
+        transform.localPosition = new Vector3(0, 2, -10);
         while (spot.range < max) 
         {
             yield return new WaitForSeconds(0.1f);
@@ -49,7 +42,6 @@ public class MonsterLightScript : MonoBehaviour
         float i = 3;
         while (i > 0)
         {
-            print("hee");
             yield return new WaitForSeconds(i);
             shake.Play("Shake");
             i -= 0.5f;

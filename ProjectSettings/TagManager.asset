@@ -8,6 +8,7 @@ TagManager:
   - place
   - broom
   - holster
+  - door
   layers:
   - Default
   - TransparentFX
