@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Supermarket.unity
     guid: 9706b0a16a82621429815fcc98be2718
   - enabled: 1
-    path: Assets/Scenes/TestChaseScene.unity
+    path: Assets/Scenes/ChaseEvent.unity
     guid: 68ae78920bfe50b4bad98654dd8c93cd
   m_configObjects: {}

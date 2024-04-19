@@ -4,11 +4,16 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - object
-  - place
-  - broom
-  - holster
-  - door
+  - Object
+  - Placement
+  - Broom
+  - Holster
+  - Door
+  - Hand
+  - Scanner
+  - Fluid
+  - Butcher
+  - End
   layers:
   - Default
   - TransparentFX
