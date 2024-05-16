@@ -10,10 +10,15 @@ TagManager:
   - Holster
   - Door
   - Hand
-  - Scanner
   - Fluid
   - Butcher
   - End
+  - Mess
+  - Car
+  - Monitor
+  - Scanner
+  - Flickering
+  - Speaker
   layers:
   - Default
   - TransparentFX
@@ -23,7 +28,7 @@ TagManager:
   - UI
   - Objects
   - Setting
-  - 
+  - Manager
   - 
   - 
   - 

@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using static UnityEngine.GraphicsBuffer;
 
 public class ButcherScript : MonoBehaviour
 {
@@ -17,37 +18,56 @@ public class ButcherScript : MonoBehaviour
     private bool chase = false;
     public string lose;
 
+    public CharacterController characterController;
+    public CameraController cameraController;
+
+    public AudioClip[] sounds;
+    public AudioSource source1;
+    public AudioSource source2;
+
     void Start()
     {
+        characterController = FindFirstObjectByType<CharacterController>();
+        cameraController = FindFirstObjectByType<CameraController>();
+
+        transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false); // mega ugo but idc at this point
         trigger = GetComponent<Collider>();
         trigger.enabled = false;
         player = GameObject.FindGameObjectWithTag("Player").transform;
         shake = Camera.main.GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         spot = GetComponent<Light>();
-        transform.GetChild(0).GetChild(0).GetComponent<Renderer>().enabled = false;
+        transform.GetChild(0).gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        transform.GetChild(0).transform.rotation = Quaternion.LookRotation(Camera.main.transform.position - transform.position, transform.up);
-        if (chase) agent.SetDestination(player.position);
+        if (Camera.main != null) 
+        {
+            Vector3 targetPostition = new Vector3(Camera.main.transform.position.x, this.transform.position.y, Camera.main.transform.position.z);
+            transform.GetChild(0).transform.LookAt(targetPostition);
+        }
+        if (chase && player != null) agent.SetDestination(player.position);
     }
 
     public IEnumerator prep()
     {
-        transform.GetChild(0).GetChild(0).GetComponent<Renderer>().enabled = true;
+        transform.GetChild(0).gameObject.SetActive(true);
         trigger.enabled = true;
         StartCoroutine("approach");
-        StartCoroutine("shaker");
         StopCoroutine("prep");
         yield return null;
     }
 
     IEnumerator approach()
     {
+        source1.clip = sounds[0];
+        source1.Play();
+        source2.clip = sounds[1];
+        source2.Play();
         spot.range = 10;
         yield return new WaitForSeconds(2);
+        StartCoroutine("shaker");
         chase = true;
         while (spot.range < max)
         {
@@ -59,22 +79,43 @@ public class ButcherScript : MonoBehaviour
 
     IEnumerator shaker()
     {
-        float i = 3;
-        while (i > 0)
+        float i = 2;
+        while (i > 0.5f)
         {
             yield return new WaitForSeconds(i);
+            source1.clip = sounds[Random.Range(0,2)+2];
+            source1.Play();
             shake.Play("Shake");
-            i -= 0.5f;
+            i -= 0.2f;
         }
         while (shakeTime)
         {
+            yield return new WaitForSeconds(0.5f);
+            source1.clip = sounds[Random.Range(0, 2) + 2];
+            source1.Play();
             shake.Play("Shake");
-            yield return new WaitForSeconds(0.1f);
         }
         StopCoroutine("shaker");
     }
     private void OnTriggerEnter(Collider col)
     {
-        if (col.CompareTag("Player")) SceneManager.LoadScene(lose);
+        if (col.CompareTag("Player"))
+        {
+            StartCoroutine("kill_player");
+        }
+    }
+
+    private IEnumerator kill_player()
+    {
+        source1.clip = sounds[0];
+        source1.Play();
+        source2.clip = sounds[4];
+        source2.Play();
+        StopCoroutine("shaker");
+        Destroy(characterController.gameObject);
+        Destroy(cameraController.gameObject);
+        transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("Day3");
     }
 }

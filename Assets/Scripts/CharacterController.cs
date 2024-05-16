@@ -7,6 +7,7 @@ public class CharacterController: MonoBehaviour
     [SerializeField] float walk_speed;
     [SerializeField] float run_speed;
     [SerializeField] float intervals;
+    [SerializeField] bool toggleablelight;
     [SerializeField] AudioClip[] tileStep;
 
     private AudioSource source;
@@ -27,6 +28,8 @@ public class CharacterController: MonoBehaviour
     // move
     private void FixedUpdate()
     {
+        if (toggleablelight)
+            cam.gameObject.GetComponent<Light>().range = (transform.position.z > 7) ? 12 : 3;
         transform.forward = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up).normalized;
         if (!cam.in_animation)
         {
